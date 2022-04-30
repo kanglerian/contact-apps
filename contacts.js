@@ -1,10 +1,6 @@
 const fs = require('fs');
-const readline = require('readline');
-
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+const chalk = require('chalk');
+const validator = require('validator');
 
 // membuat folder data jika belum ada
 const dirPath = "./data";
@@ -18,26 +14,46 @@ if(!fs.existsSync(dataPath)){
     fs.writeFileSync(dataPath, '[]', 'utf-8');
 }
 
-const tulisPertanyaan = (pertanyaan) => {
-    return new Promise((resolve, reject) => {
-        rl.question(pertanyaan, (jawaban) => {
-            resolve(jawaban);
-        });
-    });
-}
-
 const simpanContact = (nama, email, nohp) => {
     const contact = {nama, email, nohp};
     const file = fs.readFileSync('data/contacts.json', 'utf-8');
     const contacts = JSON.parse(file);
 
+    // cek duplikat
+    const duplikat = contacts.find((contact) => contact.email === email);
+    if(duplikat){
+        console.log(
+            chalk.bgRed.white.bold(
+                'Contact sudah terdaftar gunakan email lain'
+            ));
+        return false;
+    }
+
+    // cek Email
+    if(email){
+        if(!validator.isEmail(email)){
+            console.log(
+                chalk.bgRed.white.bold(
+                    'Email tidak valid!'
+                ));
+            return false;
+        }
+    }
+
+    // cek no HP
+    if(!validator.isMobilePhone(nohp, 'id-ID')){
+        console.log(
+            chalk.bgRed.white.bold(
+                'Nomor HP tidak valid!'
+            ));
+        return false;
+    }
+
     contacts.push(contact);
     fs.writeFileSync('data/contacts.json', JSON.stringify(contacts));
-    console.log(`Data ${nama} telah disimpan dengan email ${email}`)
-    rl.close();
+    console.log(chalk.bgGreen.black.bold(`Terima kasih, data ${nama} telah disimpan`));
 }
 
 module.exports = {
-    tulisPertanyaan,
     simpanContact
 };
