@@ -1,0 +1,11 @@
+{
+  "name": "contact-apps",
+  "version": "1.0.0",
+  "description": "Studi kasus belajar nodeJS pembuatan aplikasi Contact.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kanglerian",
+  "license": "ISC"
+}
