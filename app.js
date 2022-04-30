@@ -7,5 +7,4 @@ const main = async() => {
 
     simpanContact(nama, email, nohp);
 }
-coba
 main();
